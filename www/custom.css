@@ -1,0 +1,15 @@
+.my-header {
+  height: 30px;
+  font-size: 15px;
+}
+.my-row {
+  height: 30px;
+}
+.my-col {
+  width: 4px;
+  font-size: 15px;
+}
+
+table .table {
+  font-size: 0.262rem;
+}

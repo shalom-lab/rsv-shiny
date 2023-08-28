@@ -1,0 +1,13 @@
+name: result-viz
+title: result-viz
+username:
+account: slr95
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9576602
+bundleId: 7555357
+url: https://slr95.shinyapps.io/result-viz/
+when: 1691732597.60598
+lastSyncTime: 1691732597.606
+asMultiple: FALSE
+asStatic: FALSE
