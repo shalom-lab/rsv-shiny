@@ -139,7 +139,7 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                               )
                             )),
                   nav_spacer(),
-                  nav_panel(tags$a(shiny::icon("github"), "Github", href = "https://posit.co", target = "_blank"))
+                  nav_panel(tags$a(shiny::icon("github"), "Github", href = "https://github.com/shalom-lab/rsv-shiny", target = "_blank"))
 )
 server <- function(input, output,session) {
   hrServer('hr')
