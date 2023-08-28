@@ -2,7 +2,7 @@
 
 ![RSV Banner](images/plot_1.png)
 
-Welcome to the Shiny application for modeling the optimal RSV (Respiratory Syncytial Virus) passive immunization strategy. This application is designed to simulate and evaluate the effectiveness and cost-effectiveness of different passive RSV  immunization strategies for preventing RSV-ALRI hospitalization.
+Welcome to the Shiny application for modeling the optimal RSV (Respiratory Syncytial Virus) passive immunization strategy. This application is designed to simulate and evaluate the effectiveness and cost-effectiveness of different passive RSV immunization strategies for preventing RSV-ALRI hospitalization.
 
 ## Introduction
 
@@ -16,7 +16,13 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
 
 -   **Visualization:** The application generates visualizations, including graphs and charts, to help users understand the implications of their chosen parameters and strategies.
 
-![RSV Banner](images/plot_2.png) ![RSV Banner](images/plot_3.png) ![RSV Banner](images/plot_4.png) ![RSV Banner](images/plot_5.png)
+![RSV Banner](images/plot_2.png)
+
+![RSV Banner](images/plot_3.png) 
+
+![RSV Banner](images/plot_4.png) 
+
+![RSV Banner](images/plot_5.png)
 
 ## Getting Started
 
@@ -40,6 +46,8 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
     library(shiny)
     runApp("app.R")
     ```
+## Online version
+[https://slr95.shinyapps.io/rsv-strategy/](https://slr95.shinyapps.io/rsv-strategy/)
 
 ## Session Info
 
