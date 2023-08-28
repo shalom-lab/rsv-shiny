@@ -20,8 +20,6 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
 
 ## Getting Started
 
-### Installation
-
 1.  Clone this repository to your local machine or server.
 
     ```{bash}
@@ -38,7 +36,9 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
 3.  Open RStudio and set the working directory to where you cloned the repository and Run the Shiny application.
 
     ```{r}
-    Run the Shiny application
+    # Run the Shiny application
+    library(shiny)
+    runApp("app.R")
     ```
 
 ## Session Info
@@ -172,4 +172,4 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
 
 ## Contact Information
 
-For questions or inquiries, please contact [slren95\@163.com](mailto:slren95@163.com){.email}
+For questions or inquiries, please contact [slren95\@163.com](mailto:slren95@163.com)
