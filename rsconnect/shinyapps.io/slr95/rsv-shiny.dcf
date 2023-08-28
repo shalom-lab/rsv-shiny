@@ -1,12 +1,12 @@
-name: rsv-strategy
-title: rsv-strategy
+name: rsv-shiny
+title: rsv-shiny
 username: slr95
 account: slr95
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 9690562
-bundleId: 7614732
-url: https://slr95.shinyapps.io/rsv-strategy/
+appId: 9695361
+bundleId: 7616443
+url: https://slr95.shinyapps.io/rsv-shiny/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE

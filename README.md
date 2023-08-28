@@ -47,7 +47,7 @@ Respiratory Syncytial Virus (RSV) is a common respiratory virus that can cause s
     runApp("app.R")
     ```
 ## Online version
-[https://slr95.shinyapps.io/rsv-strategy/](https://slr95.shinyapps.io/rsv-strategy/)
+[https://slr95.shinyapps.io/rsv-shiny](https://slr95.shinyapps.io/rsv-shiny)
 
 ## Session Info
 
