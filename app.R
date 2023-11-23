@@ -20,17 +20,24 @@ theme<-bs_theme(fg = "rgb(20, 86, 131)", font_scale = NULL,
 
 ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',window_title = 'Modeling the Optimal RSV Immunization strategy',
                   header=tagList(includeCSS("www/custom.css")),
-                  title = strong(style="color:white;",HTML("Modeling the Optimal Seasonal Passive Immunization <br/> Strategy for Respiratory Syncytial Virus(RSV) Prevention")),
-                  nav_panel(title='Birth cohort',
+                  title = strong(style="color:white;",HTML("Modeling the Optimal Monoclonal Antibody Administration <br/> Strategy for Respiratory Syncytial Virus(RSV) Prevention")),
+                  nav_panel(title='Methods',
                             navset_pill_list(widths = c(2,10),fluid = F,
                                              nav_panel(title = "Study Site",
                                                        card(height = '600px',
                                                                        full_screen = TRUE,
-                                                                       card_header('Table 2 Study Site'),
+                                                                       card_header('Study Site'),
                                                                        leafletOutput('map'),
                                                                        card_footer("SCH: Soochow University affilicated Childrens' Hospital"))
                                              ),
-                                             nav_panel(title = 'Hospitalization Rate',hrUI('hr'))
+                                             nav_panel(title = 'Hospitalization Rate',hrUI('hr')),
+                                             nav_panel(title='Model Structure',
+                                                       card(height = '600px',
+                                                            full_screen = TRUE,
+                                                            card_header('Figure 1.Directed acyclic graph and model structure for strategy evaluatio'),
+                                                            imageOutput('dag',width='80%',height = '600px'),
+                                                            card_footer("RSV-ALRI: respiratory syncytial virus associated acute lower respiratory infection; mAb: monoclonal antibody"))
+                                                       )
                             )
                   ),
                   nav_panel(title='Candidate Strategies',
@@ -62,22 +69,21 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                                      actionButton('run','Run Model',class="btn-primary")
                                    ),
                                    navset_tab(nav_panel(title = "Result",full_screen = TRUE,
-                                                        div(style="overflow-y:scroll",dataTableOutput('tb_res_df'))),
+                                                        div(style="overflow-y:scroll",DT::dataTableOutput('tb_res_df'))),
                                               nav_panel(title = "Average",
-                                                        div(style="overflow-y:scroll",dataTableOutput('tb_sum_res'))),
+                                                        div(style="overflow-y:scroll",DT::dataTableOutput('tb_sum_res'))),
                                               nav_panel(title = "Cases Raw",echarts4rOutput('et_casesn',height = '500px')),
                                               nav_panel(title = "Cases Averted",echarts4rOutput('et_casesa',height = '500px')),
                                               nav_panel(title = "Doses",echarts4rOutput('et_doses',height = '500px')),
                                               nav_panel(title = "NNT",echarts4rOutput('et_nnt',height = '500px')),
                                               nav_panel(title = "TOP-NNT",echarts4rOutput('et_top_nnt',height = '500px')),
-                                              nav_panel(title = "TOP-NNT",plotOutput('pt_top_nnt',height = '500px')),
+                                              nav_panel(title = "TOP-NNT(ggplot)",plotOutput('pt_top_nnt',height = '500px')),
                                               nav_panel(title = "TOP-AVT",echarts4rOutput('et_top_avt',height = '500px')),
-                                              nav_panel(title = "TOP-AVT",plotOutput('pt_top_avt',height = '500px')),
+                                              nav_panel(title = "TOP-AVT(ggplot)",plotOutput('pt_top_avt',height = '500px')),
                                               nav_panel(title = "NNT-AVT(facet)",plotOutput('pt_facet',height = '500px')),
                                               nav_panel(title = "NNT-AVT(zoom)",plotOutput('pt_zoom',height = '500px')),
                                               nav_panel(title = "NNT-AVT(plotly)",plotlyOutput('pt_plotly',height = '500px')),
-                                              nav_panel(title = "Dominate",plotOutput('pt_dominate',height = '500px')),
-                                              nav_panel(title = "Dominate(percent)",plotOutput('pt_dominate_per',height = '500px')),
+                                              nav_panel(title = "Superior Strategies",plotOutput('pt_superior',height = '500px'))
                                    )
                                  )),
                   nav_panel(title='Sensitive Analysis',
@@ -96,7 +102,7 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                                   echarts4rOutput('top_nnt_e1',width = 'auto'),
                                   echarts4rOutput('top_nnt_e2',width = 'auto')
                                 )),
-                                nav_panel('Top-NNT',layout_column_wrap(
+                                nav_panel('Top-NNT(ggplot)',layout_column_wrap(
                                   width=1/2,height = '500px',
                                   plotOutput('top_nnt_1'),
                                   plotOutput('top_nnt_2')
@@ -106,7 +112,7 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                                   echarts4rOutput('top_avt_e1',width = '100%'),
                                   echarts4rOutput('top_avt_e2',width = '100%')
                                 )),
-                                nav_panel('Top-AVT',layout_column_wrap(
+                                nav_panel('Top-AVT(ggplot)',layout_column_wrap(
                                   width=1/2,height = '500px',
                                   plotOutput('top_avt_1'),
                                   plotOutput('top_avt_2')
@@ -126,15 +132,10 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                                   plotOutput('nnt_f1'),
                                   plotOutput('nnt_f2')
                                 )),
-                                nav_panel('Dominate',layout_column_wrap(
+                                nav_panel('Superior Strategy',layout_column_wrap(
                                   width=1/2,height = '500px',
-                                  plotOutput('dominate_1'),
-                                  plotOutput('dominate_2')
-                                )),
-                                nav_panel('Dominate(per)',layout_column_wrap(
-                                  width=1/2,height = '500px',
-                                  plotOutput('dominate_per_1'),
-                                  plotOutput('dominate_per_2')
+                                  plotOutput('superior_1'),
+                                  plotOutput('superior_2')
                                 ))
                               )
                             )),
@@ -142,6 +143,9 @@ ui <- page_navbar(id="pagenav",theme = theme,fillable = T,selected = 'default',w
                   nav_panel(tags$a(shiny::icon("github"), "Github", href = "https://github.com/shalom-lab/rsv-shiny", target = "_blank"))
 )
 server <- function(input, output,session) {
+  output$dag<-renderImage(
+    list(src='www/fig-dag.png')
+  )
   hrServer('hr')
   output$map<-renderLeaflet(base)
   params<-reactive({
@@ -179,20 +183,20 @@ server <- function(input, output,session) {
     scenario_df_all_init[[1,'res_df']][[1]]
   })
   sum_res<-reactive(
-    summarise_res(res_df())
+    summarise_res2(res_df())
   )
   # indicator
   output$et_casesn<-renderEcharts4r(
-    plot_indicator(sum_res(),CasesN)
+    plot_indicator(sum_res(),'CasesN')
   )
   output$et_casesa<-renderEcharts4r(
-    plot_indicator(sum_res(),CasesA)
+    plot_indicator(sum_res(),'CasesA')
   )
   output$et_doses<-renderEcharts4r(
-    plot_indicator(sum_res(),Doses)
+    plot_indicator(sum_res(),'Doses')
   )
   output$et_nnt<-renderEcharts4r(
-    plot_indicator(sum_res(),NNT)
+    plot_indicator(sum_res(),'NNT')
   )
   # TOP 20
   output$et_top_nnt<-renderEcharts4r(
@@ -217,33 +221,32 @@ server <- function(input, output,session) {
   output$pt_plotly<-renderPlotly(
     plot_nnt(sum_res())$p %>% ggplotly()
   )
-  # dominate
-  output$pt_dominate<-renderPlot(
-    plot_dominate(sum_res())
+  # Superior
+  output$pt_superior<-renderPlot(
+    plot_superior(sum_res())
   )
-  output$pt_dominate_per<-renderPlot(
-    plot_dominate_per(sum_res())
-  )
-  output$tb_res_df<-renderDataTable(
+  output$tb_res_df<-DT::renderDataTable(
     datatable(res_df() %>% dplyr::mutate(across(where(is.numeric),~round(.x))),width = '800px',height = '600px',
-              #extensions = 'Buttons',
+              extensions = 'Buttons',
               rownames = F,
               options = list(dom = 'Blfrtip',
                              autoWidth = TRUE,
-                             #buttons = c('copy', 'csv', 'excel'),
+                             buttons = c('copy', 'csv', 'excel'),
                              lengthMenu = list(c(10,25,50,-1),
                                                c(10,25,50,"All"))))
   )
-  output$tb_sum_res<-renderDataTable(
+  output$tb_sum_res<-DT::renderDataTable(
     datatable(sum_res() %>% 
-                select(strategy,CasesN,CasesA,Doses,NNT,ratio_casesa,ratio_nnt) %>%
-                mutate(across(2:5,~round(.x)),
-                       across(6:7,~round(.x,2))),
-              #extensions = 'Buttons',
+                select(strategy,CasesN,Doses,CasesA_mean,CasesA_sd,NNT_mean,NNT_sd,ratio_casesa,ratio_nnt) %>%
+                mutate(across(2:7,~round(.x))) %>%
+                mutate(Ratio_of_CasesA_relative_to_S1=round(ratio_casesa,3),
+                       Ratio_of_NNT_relative_to_S1=round(ratio_nnt,3)) %>%
+                select(-ratio_casesa,-ratio_nnt),
+              extensions = 'Buttons',
               rownames = F,
               options = list(dom = 'Blfrtip',
                              autoWidth = TRUE,
-                             #buttons = c('copy', 'csv', 'excel'),
+                             buttons = c('copy', 'csv', 'excel'),
                              lengthMenu = list(c(10,25,50,-1),
                                                c(10,25,50,"All"))))
   )
@@ -293,16 +296,16 @@ server <- function(input, output,session) {
     } else if(df$cat[1]=='S3') {
       t<-glue_data(df,'Immunization at season strategy(S3.{n1}.{n2}), administering monoclonal antibody to children age less or equal than {n2} months old in {month.name[n1]} every year')[1]
     } else {
-      t<-glue_data(df,'Hybrid strategy(S4.{n1}.{n2}.{n3}.{n4}),combination of S2.{n1}.{n2} and S3.{n3}.{n4}, administering monoclonal antibody at birth to children born between {month.name[n1]} and {rep(month.name,2)[n1+n2-1]}, and administering monoclonal antibody to children age less or equal than {n4} months old in {month.name[n3]} for children born outside the time window from {month.name[n1]} to {rep(month.name,2)[n1+n2-1]}.')
+      t<-glue_data(df,'Seasonal with annual catch-up strategy(S4.{n1}.{n2}.{n3}.{n4}),combination of S2.{n1}.{n2} and S3.{n3}.{n4}, administering monoclonal antibody at birth to children born between {month.name[n1]} and {rep(month.name,2)[n1+n2-1]}, and administering monoclonal antibody to children age less or equal than {n4} months old in {month.name[n3]} for children born outside the time window from {month.name[n1]} to {rep(month.name,2)[n1+n2-1]}.')
     }
     p(t)
   })
-  output$scenario_table<-renderDataTable(
+  output$scenario_table<-DT::renderDataTable(
     scenario_df_all() %>% select(-c(res_df,sList)),
     options=list(columnDefs = list(list(targets = 1:3, searchable = T)),
                  dom = 'Blfrtip',
                  autoWidth = TRUE,
-                 #buttons = c('copy', 'csv', 'excel'),
+                 buttons = c('copy', 'csv', 'excel'),
                  lengthMenu = list(c(10,25,50,-1),
                                    c(10,25,50,"All"))),
     selection = list(mode = 'multiple', selected = c(1,2), target="row")
@@ -320,7 +323,7 @@ server <- function(input, output,session) {
   })
   sum_res_vs<-reactive({
     res_df_vs() %>%
-      map(~summarise_res(.x))
+      map(~summarise_res2(.x))
   })
   output$s1<-renderText({
     paste0(
@@ -384,13 +387,15 @@ server <- function(input, output,session) {
   output$top_avt_1<-renderPlot({
     v()
     sum_res_vs()[[1]] %>%
-      top_ggplot('avt')
+      top_ggplot('avt')+
+      theme(text=element_text(size=18))
   }
   )
   output$top_avt_2<-renderPlot({
     v()
     sum_res_vs()[[2]] %>%
-      top_ggplot('avt')
+      top_ggplot('avt')+
+      theme(text=element_text(size=18))
   }
   )
   # NNT-AVT facet
@@ -429,24 +434,14 @@ server <- function(input, output,session) {
   }
   )
   # Dominate
-  output$dominate_1<-renderPlot({
+  output$superior_1<-renderPlot({
     v()
-    plot_dominate(sum_res_vs()[[1]])
+    plot_superior(sum_res_vs()[[1]])
   }
   )
-  output$dominate_2<-renderPlot({
+  output$superior_2<-renderPlot({
     v()
-    plot_dominate(sum_res_vs()[[2]])
-  }
-  )
-  output$dominate_per_1<-renderPlot({
-    v()
-    plot_dominate_per(sum_res_vs()[[1]])
-  }
-  )
-  output$dominate_per_2<-renderPlot({
-    v()
-    plot_dominate_per(sum_res_vs()[[2]])
+    plot_superior(sum_res_vs()[[2]])
   }
   )
 }

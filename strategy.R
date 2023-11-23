@@ -251,27 +251,10 @@ model_for<-function(scenario){
   res_df
 }
 
-# scenario parameters 
-# scenario_df<-tribble(
-#   ~seed,~repetition,~population,~br,~efficacy_min,~efficacy_max,~coverage_rate,~protection_month,
-#   1234,100,12000000,7/1000,0.6,0.6,0.2,5,
-#   1234,100,12000000,7/1000,0.8,0.8,0.2,5,
-#   1234,100,12000000,7/1000,0.6,0.8,0.2,5,
-#   1234,100,12000000,7/1000,0.6,0.6,0.4,5,
-#   1234,100,12000000,7/1000,0.8,0.8,0.4,5,
-#   1234,100,12000000,7/1000,0.6,0.8,0.4,5,
-#   1234,100,12000000,7/1000,0.6,0.6,0.2,4,
-#   1234,100,12000000,7/1000,0.8,0.8,0.2,4,
-#   1234,100,12000000,7/1000,0.6,0.8,0.2,4
-# ) %>%
-#   mutate(sList=map(seed,~sList)) %>%
-#   mutate(res_df=NA)
-
-
 # Run Model ----
 
-#rio::export(scenario_df_all,'shiny/scenario_df_all.rds')
-#scenario_df_all<-import('shiny/scenario_df_all.rds')
+#rio::export(scenario_df_all,'rsv-shiny/scenario_df_all.rds')
+#scenario_df_all<-import('rsv-shiny/scenario_df_all.rds')
 
 # scenario_df<-tribble(
 #   ~seed,~repetition,~population,~br,~efficacy_min,~efficacy_max,~coverage_rate,~protection_month,
@@ -283,11 +266,13 @@ model_for<-function(scenario){
 #   1234,100,12000000,7/1000,0.6,0.6,0.6,5,
 #   1234,100,12000000,7/1000,0.6,0.6,0.8,5,
 #   1234,100,12000000,7/1000,0.6,0.6,0.2,3,
-#   1234,100,12000000,7/1000,0.6,0.6,0.2,4
+#   1234,100,12000000,7/1000,0.6,0.6,0.2,4,
+#   1234,100,12000000,7/1000,0.6,0.6,0.2,6,
+#   1234,100,12000000,7/1000,0.6,0.6,0.2,7
 # ) %>%
 #   mutate(sList=map(seed,~sList)) %>%
 #   mutate(res_df=NA)
-  
+
 run_model<-function(scenario_df,scenario_df_all){
   new_scenario<-anti_join(scenario_df,scenario_df_all %>%
                             select(-c(res_df,sList)))
@@ -296,9 +281,9 @@ run_model<-function(scenario_df,scenario_df_all){
     for(l in 1:nrow(new_scenario)){
       new_scenario[[l,'res_df']]<-list(model_for(new_scenario[l,]))
     }
-    rio::export(new_scenario,paste0('shiny/','new_scenario-',format(Sys.time(), "%Y-%M-%d %H-%m"),'.rds'))
+    rio::export(new_scenario,paste0('rsv-shiny/','new_scenario-',format(Sys.time(), "%Y-%M-%d %H-%m"),'.rds'))
     df_all<-bind_rows(scenario_df_all,new_scenario)
-    rio::export(df_all,paste0('shiny/scenario_df_all.rds'))
+    rio::export(df_all,paste0('rsv-shiny/scenario_df_all.rds'))
   }
 }
 
